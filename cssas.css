@@ -1,0 +1,81 @@
+/* 
+    Created on : 08.11.2016, 19:46:09
+    Author     : jpm
+*/
+
+* {
+    font-family: 'Open Sans', sans-serif;
+
+    
+}
+
+.container {
+
+    width: 1000px;
+    margin-top: 20px;
+    margin-left: 200px;
+    
+   
+    
+    
+}
+
+
+.hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 10px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+    
+}
+
+.headi {
+    
+    background-color: #00cccc;
+    text-align: center;
+}
+
+.btn-primary-outline {
+  background-color: lightblue;
+  border-color: #ccc;
+}
+
+.background {
+    background-color: red;
+    
+}
+
+.h1 {
+    text-align: center;
+}
+.rot {
+    color: red;
+    font-weight: bold;
+}
+
+.grau {
+    color: grey;
+}
+
+.oben {
+    margin-top: 1em;
+}
+
+form {
+    background-color: lightblue;
+    padding: 5px;
+}
+
+label {
+
+    font-size: smaller;
+    font-style: italic;
+}
+
+input {
+     display: block;
+    
+}
+
