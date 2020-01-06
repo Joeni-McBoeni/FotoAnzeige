@@ -16,7 +16,7 @@
 <body style="background-color: #00cccc">
 
   <div class="container well" style="margin-top: 10%;">
-    <center><h1>Wunderschöne Fotogalerie</h1></center>
+    <center><h1>Memegalerie</h1></center>
     <?php
     if (isset($_GET["pwd"])) {
       $datei = fopen("Account.txt","r");
@@ -162,10 +162,13 @@
           imagejpeg($bg, $verzeichnis . $datei . ".jpg", $quality);
           imagedestroy($bg);
         }
+        if (in_array(substr($datei, -4, 4), array('jpeg'))) {
+          if (file_exists($thumbverzeichnis . 'Thumb_' . $datei) == false) {
+            createThumbnail($verzeichnis . $datei, $thumbverzeichnis . 'Thumb_' . $datei, 150);
+          }
+        }
         if (in_array(substr($datei, -3, 3), array('jpg'))) {
-          if (file_exists($thumbverzeichnis . 'Thumb_' . $datei)) {
-
-          } else {
+          if (file_exists($thumbverzeichnis . 'Thumb_' . $datei) == false) {
             createThumbnail($verzeichnis . $datei, $thumbverzeichnis . 'Thumb_' . $datei, 150);
           }
         }
@@ -182,7 +185,7 @@
             echo "<a href=\"img/$file\"><img src=\"img/Thumb_".$file."\"></a>";
             $exif = exif_read_data('img/' . $file, 'FileName');
             if (isset($exif['Title'])) {
-              echo "<p>Exit Title: " . $exif['Title']."<p>"; //Diese Funktion hat nur bei jpg Dateien funktioniert
+              echo "<p>Exif Title: " . $exif['Title']."<p>"; //Diese Funktion hat nur bei jpg Dateien funktioniert
             } else {
               echo "<p>Filename: " . $exif['FileName']."<p>";
             }
