@@ -17,7 +17,52 @@
 
   <div class="container well" style="margin-top: 10%;">
     <center><h1>Memegalerie</h1></center>
+    <form action="Bildergalerie.php" method="post" enctype="multipart/form-data">
+      Select image to upload:
+      <input type="file" name="fileToUpload" id="fileToUpload">
+      <input type="submit" value="Upload Image" class="btn" name="submit">
+    </form>
+
     <?php
+    $target_dir = "img/";
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    // Check if image file is a actual image or fake image
+    if(isset($_POST["submit"])) {
+      $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+      if($check !== false) {
+        $uploadOk = 1;
+      } else {
+        $uploadOk = 0;
+      }
+    }
+
+    // Check if file already exists
+    if (file_exists($target_file)) {
+      $uploadOk = 0;
+    }
+
+    // Check file size
+    if ($_FILES["fileToUpload"]["size"] > 99900000) {
+      $uploadOk = 0;
+    }
+
+    // Allow certain file formats
+    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+    && $imageFileType != "gif" ) {
+      $uploadOk = 0;
+    }
+
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+      // if everything is ok, try to upload file
+    } else {
+      if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+      } else {
+      }
+    }
+
     if (isset($_GET["pwd"])) {
       $datei = fopen("Account.txt","r");
       $zeile = true;
@@ -162,7 +207,7 @@
           imagejpeg($bg, $verzeichnis . $datei . ".jpg", $quality);
           imagedestroy($bg);
         }
-        if (in_array(substr($datei, -4, 4), array('jpeg'))) {
+        if (in_array(substr($datei, -4, 4), array('j2peg'))) {
           if (file_exists($thumbverzeichnis . 'Thumb_' . $datei) == false) {
             createThumbnail($verzeichnis . $datei, $thumbverzeichnis . 'Thumb_' . $datei, 150);
           }
@@ -174,40 +219,40 @@
         }
       }
     }
-      $verzeichnis = openDir("img");
+    $verzeichnis = openDir("img");
 
-      while ($file = readDir($verzeichnis)) {
-        // Höhere Verzeichnisse nicht anzeigen!
-        //createThumbnail($file, substr($file, 4)."Thumb_", 150);
-        if ($file != "." && $file != ".." && substr($file, 0, 6) != 'Thumb_') {
-          if (exif_imagetype("img/".$file) ==IMAGETYPE_JPEG) {
-            echo"<div style='height: 200px; width: 200px; margin:20px; float:left;' >";
-            echo "<a href=\"img/$file\"><img src=\"img/Thumb_".$file."\"></a>";
-            $exif = exif_read_data('img/' . $file, 'FileName');
-            if (isset($exif['Title'])) {
-              echo "<p>Exif Title: " . $exif['Title']."<p>"; //Diese Funktion hat nur bei jpg Dateien funktioniert
-            } else {
-              echo "<p>Filename: " . $exif['FileName']."<p>";
-            }
-            if ($exif['FileSize'] > 1000000) {
-              echo "Dateigrösse: " .round($exif['FileSize'] / 1000000,2)." MB";
-            }
-            else {
-              echo "Dateigrösse: " .round($exif['FileSize'] / 1000,2)." kB";
-            }
-            echo("</div>");
+    while ($file = readDir($verzeichnis)) {
+      // Höhere Verzeichnisse nicht anzeigen!
+      //createThumbnail($file, substr($file, 4)."Thumb_", 150);
+      if ($file != "." && $file != ".." && substr($file, 0, 6) != 'Thumb_') {
+        if (exif_imagetype("img/".$file) ==IMAGETYPE_JPEG) {
+          echo"<div style='height: 200px; width: 200px; margin:20px; float:left;' >";
+          echo "<a href=\"img/$file\"><img src=\"img/Thumb_".$file."\"></a>";
+          $exif = exif_read_data('img/' . $file, 'FileName');
+          if (isset($exif['Title'])) {
+            echo "<p>Exif Title: " . $exif['Title']."<p>"; //Diese Funktion hat nur bei jpg Dateien funktioniert
+          } else {
+            echo "<p>Filename: " . $exif['FileName']."<p>";
           }
+          if ($exif['FileSize'] > 1000000) {
+            echo "Dateigrösse: " .round($exif['FileSize'] / 1000000,2)." MB";
+          }
+          else {
+            echo "Dateigrösse: " .round($exif['FileSize'] / 1000,2)." kB";
+          }
+          echo("</div>");
         }
       }
-      // Verzeichnis schließen
-      closeDir($verzeichnis);
+    }
+    // Verzeichnis schließen
+    closeDir($verzeichnis);
 
-      echo("</div>");
+    echo("</div>");
 
-      ?>
+    ?>
 
-    </div>
   </div>
+</div>
 </body>
 <!-- jQuery (wird für Bootstrap JavaScript-Plugins benötigt) -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
